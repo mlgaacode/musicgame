@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<song id='0' title='song1' note='song1.xml' file='song_test.mp3'/>
+<song id='1' title='song2' note='song2.xml' file='song_test.mp3'/>
+<song id='2' title='song3' note='song3.xml' file='song_test.mp3'/>
+</root>
