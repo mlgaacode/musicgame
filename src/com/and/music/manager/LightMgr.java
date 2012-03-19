@@ -26,8 +26,8 @@ public class LightMgr {
 	}
 	private void mkLight(){
 		Texture texture=Assets.getButtions();
-		textureRegion1=new TextureRegion(texture,57,0,15,15);
-		textureRegion2=new TextureRegion(texture,72,0,15,15);
+		textureRegion1=new TextureRegion(texture,58,0,15,15);
+		textureRegion2=new TextureRegion(texture,74,0,15,15);
 		light=new Image(textureRegion1);
 	}
 	public void turnRed(){

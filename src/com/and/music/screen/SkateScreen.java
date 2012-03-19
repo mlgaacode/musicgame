@@ -2,7 +2,6 @@ package com.and.music.screen;
 
 
 import javax.media.opengl.GL;
-import com.and.music.Config;
 import com.and.music.assets.Assets;
 import com.and.music.factory.AnimFactory;
 import com.and.music.factory.ButtonFactory;
@@ -16,13 +15,13 @@ import com.and.music.manager.XMLMgr;
 import com.and.music.model.Note;
 import com.and.music.model.Song;
 import com.and.music.ui.TouchDownListener;
+import com.and.music.ui.TouchUpListener;
 import com.and.music.untils.OverlapTester;
 import com.and.music.untils.TimeUtil;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -44,6 +43,7 @@ public class SkateScreen implements Screen {
 	private Label lbl_score;
 	private Note pNote;
 	private long score=0;
+	private boolean start=false;
 	
 	public SkateScreen(){	
 		stage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
@@ -56,18 +56,18 @@ public class SkateScreen implements Screen {
 	private void initStage(){	
 		Image bkImage=GUIFactory.getInstance().getGameBkImg();
 		stage.addActor(bkImage);
-		leftButton=ButtonFactory.getInstance().ctrlButton(0,touchDownLeft());
+		leftButton=ButtonFactory.getInstance().ctrlButton(0,touchDownLeft(),null);
 		leftButton.x=10; leftButton.y=43;		
 		stage.addActor(leftButton);
-		rightButton=ButtonFactory.getInstance().ctrlButton(1,touchDownRight());
-		rightButton.x=430; rightButton.y=43;
+		rightButton=ButtonFactory.getInstance().ctrlButton(1,touchDownRight(),null);
+		rightButton.x=430; rightButton.y=30;
 		stage.addActor(rightButton);
-		upButton=ButtonFactory.getInstance().ctrlButton(2,touchDownUp());
+		upButton=ButtonFactory.getInstance().ctrlButton(2,touchDownUp(),touchUpUp());
 		upButton.x=430; upButton.y=87;
 		stage.addActor(upButton);
 		anim_white=AnimFactory.getInstance().getWhite();	
 		light=LightMgr.getInstance().getLight();
-		light.x=228; light.y=330;
+		light.x=230; light.y=220;
 		stage.addActor(light);		
 		LabelStyle style=new LabelStyle(Assets.getFont1(), Color.WHITE);
 		lbl_score=new Label("0", style);
@@ -93,19 +93,22 @@ public class SkateScreen implements Screen {
 		Gdx.gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 		stage.draw();
 		batch.begin();
-		batch.draw(anim_white.getKeyFrame(TimeUtil.getInstance().getGameNow(), true),235,-2);
-		batch.draw(PlayerMgr.getInstance().getKeyFrame(), 225,10);
+		batch.draw(anim_white.getKeyFrame(TimeUtil.getInstance().getGameNow(), true),235,-15);
 		batch.end();			
+		if(start) {
+			Note note=NoteMgr.getInstance().getCurrentNote();
+			if(note!=null) noteGroup.addActorAt(0, note);		
+			pNote=NoteMgr.getInstance().firstNote();	
+			NoteMgr.getInstance().updateNotes();
+			if(pNote!=null && pNote.statetime>(pNote.time-.2f))
+				LightMgr.getInstance().turnGreen();
+			else
+				LightMgr.getInstance().turnRed();	
+		}
 		noteStage.draw();
-		
-		Note note=NoteMgr.getInstance().getCurrentNote();
-		if(note!=null) noteGroup.addActorAt(0, note);		
-		pNote=NoteMgr.getInstance().firstNote();	
-		NoteMgr.getInstance().updateNotes();
-		if(pNote!=null && pNote.statetime>(pNote.time-.2f))
-			LightMgr.getInstance().turnGreen();
-		else
-			LightMgr.getInstance().turnRed();		
+		batch.begin();
+		batch.draw(PlayerMgr.getInstance().getKeyFrame(), 217,10);
+		batch.end();	
 	}
 	
 	
@@ -144,6 +147,7 @@ public class SkateScreen implements Screen {
 		// TODO Auto-generated method stub
 
 	}
+	
 	private final TouchDownListener touchDownLeft() {
 		TouchDownListener listener=new TouchDownListener() {			
 			@Override
@@ -153,22 +157,18 @@ public class SkateScreen implements Screen {
 				PlayerMgr.getInstance().state=PlayerMgr.STATE_LEFT;				
 				if(pNote!=null){
 					float tTime= pNote.time-TimeUtil.getInstance().getTimePoint();
-						if(tTime<.5f){
-						boolean hit=OverlapTester.overlapRectangles(PlayerMgr.getInstance().getBundle(230, 10), pNote.getBundle());
-						if(hit){
+						if(tTime<.8f){
 							NoteMgr.getInstance().removeHandler(pNote);
-							if(tTime>.3 && tTime<.5){
+							if(tTime>.2 && tTime<.5){
 								Gdx.app.log("hit", "good");
 								lbl_score.setText(String.valueOf(score+=120));
-							}
-							if(tTime>.1 && tTime<.3){
+							}else	if(tTime>0 && tTime<.2){
 								Gdx.app.log("hit", "perfect");
 								lbl_score.setText(String.valueOf(score+=200));
+							}else{
+								Gdx.app.log("hit", "miss");
+								lbl_score.setText(String.valueOf(score-=50));
 							}
-						}else{
-							Gdx.app.log("hit", "miss");
-							lbl_score.setText(String.valueOf(score-=50));
-						}
 					}
 				}
 			}
@@ -191,10 +191,30 @@ public class SkateScreen implements Screen {
 		TouchDownListener listener=new TouchDownListener() {			
 			@Override
 			public void touchDown() {
-				// TODO Auto-generated method stub								
-				SongMgr.getInstance().play();
-				TimeUtil.getInstance().markPoint();
-				PlayerMgr.getInstance().state=PlayerMgr.STATE_SKATE;
+				// TODO Auto-generated method stub
+				if(start){
+					PlayerMgr.getInstance().stateTime=0f;
+					PlayerMgr.getInstance().state=PlayerMgr.STATE_JUMP;
+				}
+				if(!start){
+					start=true;
+					SongMgr.getInstance().play();
+					TimeUtil.getInstance().markPoint();
+					PlayerMgr.getInstance().state=PlayerMgr.STATE_SKATE;
+				}				
+			}
+		};
+		return listener;
+	}
+	private final TouchUpListener touchUpUp(){
+		TouchUpListener listener=new TouchUpListener() {
+			
+			@Override
+			public void touchUp() {
+				// TODO Auto-generated method stub
+				if(PlayerMgr.getInstance().state==PlayerMgr.STATE_JUMP)
+					PlayerMgr.getInstance().state=PlayerMgr.STATE_SKATE;
+				Gdx.app.log("here", "up");
 			}
 		};
 		return listener;

@@ -17,7 +17,6 @@ public class MusicGame implements ApplicationListener {
 	public void create() {
 		// TODO Auto-generated method stub
 		TimeUtil.getInstance();
-		//ScreenMgr.getInstance().setScreen(new StartScreen());
 		ScreenMgr.getInstance().setScreen(new SkateScreen());
 	}
 

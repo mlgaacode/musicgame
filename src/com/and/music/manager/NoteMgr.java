@@ -136,7 +136,8 @@ public class NoteMgr {
 			float s=to[1]-note.getPosition()[1];
 			float t=note.time-note.statetime;
 			float v=s/t;
-			float xx=note.type.equals("A")?(to[0]-10):(to[0]+10);
+			//float xx=note.type.equals("A")?(to[0]-10):(to[0]+10);
+			float xx=to[0];
 			float yy=note.getPosition()[1]+v*Gdx.graphics.getDeltaTime();
 			if(t>0){
 				note.setPosition(xx, yy);
@@ -152,9 +153,11 @@ public class NoteMgr {
 		}
 	}
 	public void removeHandler(Note note){
-		note.getStage().removeActor(note);		
-		note.destory();
-		showVector.remove(note);
+		if(note!=null){
+			note.getStage().removeActor(note);		
+			//note.destory();
+			showVector.remove(note);
+		}
 	}
 	public Note firstNote(){
 		return showVector.size()>0?showVector.firstElement():null;

@@ -2,6 +2,7 @@ package com.and.music.factory;
 
 import com.and.music.assets.Assets;
 import com.and.music.ui.TouchDownListener;
+import com.and.music.ui.TouchUpListener;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,17 +21,17 @@ public class ButtonFactory implements IFactory {
 		return instance;
 	}
 	
-	public Button ctrlButton(int type,final TouchDownListener listener){
+	public Button ctrlButton(int type,final TouchDownListener listener,final TouchUpListener listener2){
 		//type 0 1 2 3  left right up down
 		NinePatch n1;
 		if(type==0)
-			n1=new NinePatch(new TextureRegion(texture, 88, 0, 41, 39));
+			n1=new NinePatch(new TextureRegion(texture, 89, 0, 41, 40));
 		else if(type==1)
-			n1=new NinePatch(new TextureRegion(texture, 129, 0, 41, 39));
+			n1=new NinePatch(new TextureRegion(texture, 170, 0, 41, 40));
 		else if(type==2)
-			n1=new NinePatch(new TextureRegion(texture, 170,0, 41, 39));
+			n1=new NinePatch(new TextureRegion(texture, 129,0, 41, 40));
 		else 
-			n1=new NinePatch(new TextureRegion(texture, 88, 0, 41, 39));
+			n1=new NinePatch(new TextureRegion(texture, 88, 0, 41, 40));
 		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
 		Button btn=new Button(style){
 			@Override
@@ -39,6 +40,12 @@ public class ButtonFactory implements IFactory {
 				super.touchDown(x, y, pointer);
 				listener.touchDown();
 				return false;
+			}
+			@Override
+			public void touchUp(float x, float y, int pointer) {
+				// TODO Auto-generated method stub
+				super.touchUp(x, y, pointer);
+				if(listener2!=null)listener2.touchUp();
 			}
 		};
 		return btn;
