@@ -156,24 +156,28 @@ public class SkateScreen implements Screen {
 				PlayerMgr.getInstance().stateTime=0f;
 				PlayerMgr.getInstance().state=PlayerMgr.STATE_LEFT;				
 				if(pNote!=null){
-					float tTime= pNote.time-TimeUtil.getInstance().getTimePoint();
-						if(tTime<.8f){
-							NoteMgr.getInstance().removeHandler(pNote);
-							if(tTime>.2 && tTime<.5){
-								Gdx.app.log("hit", "good");
-								lbl_score.setText(String.valueOf(score+=120));
-							}else	if(tTime>0 && tTime<.2){
-								Gdx.app.log("hit", "perfect");
-								lbl_score.setText(String.valueOf(score+=200));
-							}else{
-								Gdx.app.log("hit", "miss");
-								lbl_score.setText(String.valueOf(score-=50));
-							}
-					}
+					TestTouch(pNote);
 				}
 			}
 		};
 		return listener;
+	}
+	
+	private void TestTouch(Note p){
+		float tTime= p.time-TimeUtil.getInstance().getTimePoint();
+		if(tTime<.8f){
+			NoteMgr.getInstance().removeHandler(p);
+			if(tTime>.2 && tTime<.5){
+				Gdx.app.log("hit", "good");
+				lbl_score.setText(String.valueOf(score+=120));
+			}else	if(tTime>0 && tTime<.2){
+				Gdx.app.log("hit", "perfect");
+				lbl_score.setText(String.valueOf(score+=200));
+			}else{
+				Gdx.app.log("hit", "miss");
+				lbl_score.setText(String.valueOf(score-=50));
+			}
+		}		
 	}
 	
 	private final TouchDownListener touchDownRight() {
@@ -182,7 +186,10 @@ public class SkateScreen implements Screen {
 			public void touchDown() {
 				// TODO Auto-generated method stub
 				PlayerMgr.getInstance().stateTime=0f;
-				PlayerMgr.getInstance().state=PlayerMgr.STATE_RIGHT;
+				PlayerMgr.getInstance().state=PlayerMgr.STATE_RIGHT;				
+				if(pNote!=null){
+					TestTouch(pNote);
+				}
 			}
 		};
 		return listener;
@@ -195,6 +202,9 @@ public class SkateScreen implements Screen {
 				if(start){
 					PlayerMgr.getInstance().stateTime=0f;
 					PlayerMgr.getInstance().state=PlayerMgr.STATE_JUMP;
+					if(pNote!=null && TimeUtil.getInstance().getGameNow()>pNote.time){
+						PlayerMgr.getInstance().state=PlayerMgr.STATE_SKATE;		
+					}
 				}
 				if(!start){
 					start=true;
@@ -212,8 +222,9 @@ public class SkateScreen implements Screen {
 			@Override
 			public void touchUp() {
 				// TODO Auto-generated method stub
+				if(pNote!=null)	TestTouch(pNote);				
 				if(PlayerMgr.getInstance().state==PlayerMgr.STATE_JUMP)
-					PlayerMgr.getInstance().state=PlayerMgr.STATE_SKATE;
+					PlayerMgr.getInstance().state=PlayerMgr.STATE_SKATE;			
 				Gdx.app.log("here", "up");
 			}
 		};

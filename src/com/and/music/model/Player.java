@@ -1,9 +1,11 @@
 package com.and.music.model;
 
 public class Player implements IPlayer {
+	
 	private int score=0;
 	public float width=0f;
 	public float height=0f;
+	public String name="";	
 	
 	@Override
 	public void changeClothes() {

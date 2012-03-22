@@ -3,11 +3,14 @@ package com.and.music.factory;
 import com.and.music.assets.Assets;
 import com.and.music.ui.TouchDownListener;
 import com.and.music.ui.TouchUpListener;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 
 public class ButtonFactory implements IFactory {
 	private static ButtonFactory instance=null;
@@ -86,6 +89,12 @@ public class ButtonFactory implements IFactory {
 		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
 		Button btn=new Button(style);
 		return btn;
+	}
+	public TextField inputText(){
+		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 119, 64, 17));
+		TextFieldStyle style=new TextFieldStyle(Assets.getFont1(), Color.BLACK, Assets.getFont1(), Color.GRAY, null, null, n1);
+		TextField textField=new TextField(style);
+		return textField;
 	}
 	@Override
 	public void dispose(Object type) {

@@ -2,6 +2,7 @@ package com.and.music;
 
 import javax.media.opengl.GL;
 import com.and.music.manager.ScreenMgr;
+import com.and.music.screen.LoginScreen;
 import com.and.music.screen.SkateScreen;
 import com.and.music.untils.Debugger;
 import com.and.music.untils.TimeUtil;
@@ -17,7 +18,7 @@ public class MusicGame implements ApplicationListener {
 	public void create() {
 		// TODO Auto-generated method stub
 		TimeUtil.getInstance();
-		ScreenMgr.getInstance().setScreen(new SkateScreen());
+		ScreenMgr.getInstance().setScreen(new LoginScreen());
 	}
 
 	@Override

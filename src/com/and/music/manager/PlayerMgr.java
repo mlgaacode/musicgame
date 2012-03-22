@@ -36,7 +36,12 @@ public class PlayerMgr {
 		}
 		return instance;
 	}
-	
+	public void setName(String name){
+		player.name=name;		
+	}
+	public String getName(){
+		return player.name;
+	}
 	public Rectangle getBundle(float x,float y){
 		return new Rectangle(x, y, player.width, player.height);
 	}

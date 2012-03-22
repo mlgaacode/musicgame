@@ -1,18 +1,14 @@
 package com.and.music.manager;
 
 
-import java.awt.Point;
 import java.util.Vector;
 import com.and.music.factory.NoteFactory;
 import com.and.music.model.Note;
 import com.and.music.untils.TimeUtil;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.OnActionCompleted;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.FadeOut;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
 public class NoteMgr {

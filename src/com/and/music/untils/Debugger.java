@@ -20,8 +20,7 @@ public class Debugger {
 		return instance;
 	}
 	public Debugger(){
-		LabelStyle style=new LabelStyle(new BitmapFont(Gdx.files.internal(Config.fontPath+Assets.FONT_FONT1_FNT),
-								Gdx.files.internal(Config.fontPath+Assets.FONT_FONT1_PNG),false), Color.WHITE);
+		LabelStyle style=new LabelStyle(Assets.getFont1(), Color.WHITE);
 		label=new Label("", style);
 		label.x=5f;
 		label.y=Gdx.graphics.getHeight()-10f;
@@ -32,7 +31,7 @@ public class Debugger {
 		this.label.setText(info);
 	}
 	public String getInfo(){
-		return this.label.getText();
+		return (String) this.label.getText();
 	}
 	public void draw(){
 		batch.begin();
