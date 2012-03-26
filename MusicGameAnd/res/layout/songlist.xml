@@ -3,12 +3,31 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-	<TextView
-	    android:layout_width="fill_parent"
+    <RelativeLayout
+         android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+   		android:orientation="vertical" 
+		>
+		<TextView
+	    android:layout_width="200px"
 	    android:layout_height="wrap_content"
 	    android:text="@string/songs_lv" 
 	    android:textColor="@color/white"
-	    ></TextView>
+	    android:layout_gravity="left"
+	    android:layout_marginLeft="10px"
+	    />
+
+        <Button
+            android:id="@+id/btn_editsong"
+            android:layout_width="120px"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="left"
+          android:paddingTop="15px"
+            android:text="@string/editsong_btn" />	
+		</RelativeLayout>
+		
 	 <ListView
         android:id="@+id/lv_songs"
         android:layout_width="fill_parent"

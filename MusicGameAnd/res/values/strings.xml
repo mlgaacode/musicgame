@@ -5,4 +5,5 @@
     <string name="user_name_txt">填写昵称</string>
 	<string name="login_btn">登录</string>
 	<string name="songs_lv">歌曲列表</string>
+	<string name="editsong_btn">编辑歌曲</string>
 </resources>
