@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/3271/trunk/demos/helloworld/gdx-helloworld-android/libs/armeabi-v7a
+END
+libgdx.so
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/3271/trunk/demos/helloworld/gdx-helloworld-android/libs/armeabi-v7a/libgdx.so
+END
+libandroidgl20.so
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/1426/trunk/demos/helloworld/gdx-helloworld-android/libs/armeabi-v7a/libandroidgl20.so
+END
