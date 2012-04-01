@@ -1,12 +1,9 @@
 package com.music.desk.untils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.music.desk.Config;
 import com.music.desk.assets.Assets;
 
 public class Debugger {
@@ -23,7 +20,7 @@ public class Debugger {
 		LabelStyle style=new LabelStyle(Assets.getFont1(), Color.WHITE);
 		label=new Label("", style);
 		label.x=5f;
-		label.y=Gdx.graphics.getHeight()-10f;
+		label.y=10f;
 		batch=new SpriteBatch();
 		
 	}

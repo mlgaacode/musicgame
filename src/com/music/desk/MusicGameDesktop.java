@@ -1,6 +1,6 @@
 package com.music.desk;
 
-import com.badlogic.gdx.backends.jogl.JoglApplication;
+//import com.badlogic.gdx.backends.jogl.JoglApplication;
 
 public class MusicGameDesktop {
 
@@ -9,7 +9,7 @@ public class MusicGameDesktop {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new JoglApplication(new MusicGame(), "music game",480,320,false);
+		//new JoglApplication(new MusicGame(), "music game",480,320,false);
 	}
 
 }

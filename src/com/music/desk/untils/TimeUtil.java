@@ -37,6 +37,14 @@ public class TimeUtil implements ITimeUtil {
 		// TODO Auto-generated method stub
 		return stateTime;
 	}
+	public String timeFormat(int sec){
+		String str="";
+		int m=(int)(sec/60);
+		int s=sec%60;
+		if(m<10)str="0"+m;
+		if(s<10)str=str+"0"+s;
+		return str;
+	}
 
 	@Override
 	public void render() {

@@ -1,19 +1,24 @@
 package com.music.desk;
 
-import javax.media.opengl.GL;
+import android.app.Activity;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.music.desk.manager.ScreenMgr;
-import com.music.desk.screen.LoginScreen;
 import com.music.desk.screen.SkateScreen;
 import com.music.desk.untils.Debugger;
 import com.music.desk.untils.TimeUtil;
+import com.badlogic.gdx.graphics.GL10;
 
 public class MusicGame implements ApplicationListener {
 	boolean first=true;	
 	boolean debug=true;
 	BitmapFont font;
+	public static Activity act;
+	public MusicGame(Activity act){
+		this.act=act;
+	}
 	@Override
 	public void create() {
 		// TODO Auto-generated method stub
@@ -30,7 +35,7 @@ public class MusicGame implements ApplicationListener {
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub		
-		Gdx.gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		ScreenMgr.getInstance().getScreen().render(Gdx.graphics.getDeltaTime());
 		TimeUtil.getInstance().render();
 		if(debug) renderDebug();

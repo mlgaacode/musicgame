@@ -34,7 +34,6 @@ public final class Assets {
 	public static BitmapFont getFont1(){
 		return font1==null? font1=new BitmapFont(Gdx.files.internal(Config.fontPath+Assets.FONT_FONT1_FNT),	Gdx.files.internal(Config.fontPath+Assets.FONT_FONT1_PNG),false):font1;
 	}
-	
 	public static void dispose(){
 		buttons.dispose();
 		player.dispose();

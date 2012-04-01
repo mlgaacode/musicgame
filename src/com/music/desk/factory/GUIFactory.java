@@ -31,6 +31,11 @@ public class GUIFactory implements IFactory{
 		NinePatch n=new NinePatch(new TextureRegion(texture,0,0,480,320));
 		return new Image(n);
 	}
+	public Image getInfobk(){
+		texture=Assets.getGamebk();
+		NinePatch n=new NinePatch(new TextureRegion(texture, 0, 325,267,187));
+		return new Image(n);
+	}
 	@Override
 	public void dispose(Object type) {
 		// TODO Auto-generated method stub

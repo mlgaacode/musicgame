@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.musicgame.and.R;
+import com.music.and.R;
+import com.music.and.utils.Util;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -62,29 +63,46 @@ public class SongListActivity extends Activity {
 			}
 		});
 		
-	}
-	
+	}	
 	
 	private List<Map<String, Object>> getData(){
 		List<Map<String, Object>> mListData = new ArrayList<Map<String, Object>>();		
 		mListData.addAll(Setting.getInstance().getDemoSong());
+		SQLiteDatabase database=Util.openDatabase(this);
+		Cursor mCursor=database.rawQuery("select musicId from songs",null);
+		mCursor.moveToFirst();		
 		Cursor mAudioCursor = this.getContentResolver().query(	MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,	null,null, null, MediaStore.Audio.AudioColumns.TITLE);
+		int indexTitle = mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE);
+		int indexARTIST = mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST);
+		int indexALBUM = mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM);
+		int indexId=mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns._ID);		
 		for (int i = 0; i < mAudioCursor.getCount(); i++) {
 			mAudioCursor.moveToNext();
-			int indexTitle = mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE);
-			int indexARTIST = mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST);
-			int indexALBUM = mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM);
-			int indexId=mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns._ID);
 			String strTitle = mAudioCursor.getString(indexTitle);
 			String strARTIST = mAudioCursor.getString(indexARTIST);
 			String strALBUM = mAudioCursor.getString(indexALBUM);
 			String strId=mAudioCursor.getString(indexId);	
-			HashMap<String, Object> nowMap = new HashMap<String, Object>();
-			nowMap.put("title", strTitle);
-			nowMap.put("info", strARTIST+ "---" + strALBUM);
-			nowMap.put("id", strId);
-			mListData.add(nowMap);
+			for(int j=0;j<mCursor.getColumnCount();j++){
+				mCursor.moveToNext();
+				if(strId.equals(mCursor.getString(0))){
+					HashMap<String, Object> nowMap = new HashMap<String, Object>();
+					nowMap.put("title", strTitle);
+					nowMap.put("info", strARTIST+ "---" + strALBUM);
+					nowMap.put("id", strId);
+					mListData.add(nowMap);
+					mCursor.moveToFirst();		
+					break;
+				}
+			}			
 		}
+		mCursor.close();
+		mAudioCursor.close();
+		database.close();
 		return mListData;
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
 	}
 }

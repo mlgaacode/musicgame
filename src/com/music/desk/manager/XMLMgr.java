@@ -1,13 +1,7 @@
 package com.music.desk.manager;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import com.badlogic.gdx.utils.XmlWriter;
-import com.music.desk.Config;
 import com.music.desk.proxy.IDataProxy;
 
 public class XMLMgr implements IXMLMgr {
@@ -19,9 +13,6 @@ public class XMLMgr implements IXMLMgr {
 	 */
 	private static XMLMgr instance=null;
 	private XmlReader reader;
-	private XmlWriter writer;
-	private Element root;
-	private String file;
 	private IDataProxy proxy;
 	public XMLMgr(){
 		reader=new XmlReader();
@@ -37,56 +28,14 @@ public class XMLMgr implements IXMLMgr {
 	}
 	
 	@Override
-	public void setFile(String file) {
-		// TODO Auto-generated method stub
-		this.file=file;
-	}
-	
-	@Override
-	public void writeXML(String xml) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
 	public Element readXML() {
 		// TODO Auto-generated method stub
-		root=reader.parse(proxy.getNotesInfo());
-		return root;
+		return reader.parse(proxy.getNotesInfo());
 	}
-	
-	public void parseXML(String xml){
-		root=reader.parse(xml);
-		//return root;
-	}
-	
-	@Override
-	public void saveXML(String file) {
-		// TODO Auto-generated method stub
-		try {
-			writer=new XmlWriter(new FileWriter(file));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public void saveXML(Element element) {
 		// TODO Auto-generated method stub
-		try {
-			writer=new XmlWriter(new FileWriter(Config.songPath+this.file));
-			writer.text(element.toString());
-			writer.flush();
-			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	@Override
-	public void saveXML() {
-		// TODO Auto-generated method stub
-		
+		proxy.setNotesInfo(element.toString());
 	}
 	
 	

@@ -5,10 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -95,7 +92,7 @@ public class MainScreen implements Screen,InputProcessor{
 		list_song.setSelectedIndex(0);
 		Song song=SongFactory.getInstance().getSong();
 		SongMgr.getInstance().setSong(song);
-		XMLMgr.getInstance().setFile(song.getNoteFile());
+		//XMLMgr.getInstance().setFile(song.getNoteFile());
 		stage.addActor(list_song);
 	}
 	
@@ -120,7 +117,7 @@ public class MainScreen implements Screen,InputProcessor{
 				list_song.action(MoveTo.$(Gdx.graphics.getWidth(), list_song.y, 0.5f));
 				SongMgr.getInstance().play();
 				TimeUtil.getInstance().markPoint();
-				XMLMgr.getInstance().setFile(SongMgr.getInstance().getSong().getNoteFile());
+				//XMLMgr.getInstance().setFile(SongMgr.getInstance().getSong().getNoteFile());
 				image_touch.visible=true;
 			}
 		};

@@ -90,12 +90,19 @@ public class ButtonFactory implements IFactory {
 		Button btn=new Button(style);
 		return btn;
 	}
+	public Button confirmButton(){
+		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 160, 78, 25));
+		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
+		Button btn=new Button(style);
+		return btn;
+	}
 	public TextField inputText(){
 		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 119, 64, 17));
 		TextFieldStyle style=new TextFieldStyle(Assets.getFont1(), Color.BLACK, Assets.getFont1(), Color.GRAY, null, null, n1);
 		TextField textField=new TextField(style);
 		return textField;
 	}
+	
 	@Override
 	public void dispose(Object type) {
 		// TODO Auto-generated method stub

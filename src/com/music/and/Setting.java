@@ -10,7 +10,7 @@ public final class Setting {
 	private static Setting _instance=null;
 	private static String _name="";
 	public static String SDPATH=android.os.Environment.getExternalStorageDirectory().getAbsolutePath()+"";
-	public static String DATAPATH=SDPATH+"/musicgame";
+	public static String DATAPATH=SDPATH+"/com.music.game";
 	public static String DATAFILE="mg.sqlite";
 	private static List<Map<String, Object>> DemoSongs;
 	public static Boolean isFirst=false;
