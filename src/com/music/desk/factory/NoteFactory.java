@@ -31,16 +31,18 @@ public class NoteFactory implements IFactory {
 	}
 	
 	public  Note getNotesByXML(Element element){
-		Note note;
-		if(Float.valueOf(element.getAttribute("duration"))<2f)
-			note=getNote("");
-		else 
-			note=getNote("long");
-		note.time=Float.valueOf(element.getAttribute("time"));
+		Note note=getNote("");
+//		if(Float.valueOf(element.getAttribute("duration"))/1000<2f)
+//			note=getNote("");
+//		else {
+//			note=getNote("long");
+//			note.scaleY=Float.valueOf(element.getAttribute("duration"))*10+1;
+//		}
+		note.time=Float.valueOf(element.getAttribute("time"))/1000;
 		note.duration=Float.valueOf(element.getAttribute("duration"));
 		note.type=element.getAttribute("type").trim();
-		note.state=Note.STATE_SCALE_FLIP;
-		note.scaleX=Float.valueOf(element.getAttribute("duration"))*10+1;
+		note.state=Note.STATE_SCALE_FLIP;		
+		//note.scaleX=Float.valueOf(element.getAttribute("duration"))*10+1;
 		return note;
 	}
 	@Override

@@ -7,15 +7,12 @@
         android:layout_width="fill_parent"
         android:layout_height="200px"
         ></RelativeLayout>
-    
-	<EditText
-	    android:id="@+id/txt_user_name"
-	    android:layout_gravity="center_horizontal"
+    <Spinner
+        android:id="@+id/sp_nickname"
+         android:layout_gravity="center_horizontal"
 	    android:layout_width="200px"
-	    android:singleLine="true"
 	    android:layout_height="wrap_content"
-	    ></EditText>
-	
+        ></Spinner>	        
 	<Button
 	    android:id="@+id/btn_login"
 	    android:layout_width="75px"

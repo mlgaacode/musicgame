@@ -11,5 +11,4 @@ public class MusicGameDesktop {
 		// TODO Auto-generated method stub
 		//new JoglApplication(new MusicGame(), "music game",480,320,false);
 	}
-
 }

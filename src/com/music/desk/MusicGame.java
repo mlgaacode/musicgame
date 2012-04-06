@@ -19,6 +19,9 @@ public class MusicGame implements ApplicationListener {
 	public MusicGame(Activity act){
 		this.act=act;
 	}
+	public MusicGame(){
+
+	}
 	@Override
 	public void create() {
 		// TODO Auto-generated method stub

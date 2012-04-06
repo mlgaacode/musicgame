@@ -41,20 +41,20 @@ public class SkateScreen implements Screen {
 	private Stage noteStage;
 	private Animation anim_white;
 	private SpriteBatch batch;
-	private float[] p0={240,220},p1={240,40};
+	private float[] p0={240,210},p1={240,40};
 	private Button leftButton,rightButton,upButton;
 	private Image light;
 	private Group noteGroup;
 	private Note pNote;
-	private boolean start=false;
+	private boolean start=false,isUp=false;
 	private Label lbl_name,lbl_songInfo,lbl_time,lbl_score;
 	private InfoWin win_info;
-	private boolean over=false;
 	
 	public SkateScreen(){	
-		stage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+		stage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);		
 		noteStage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-		initMgr();
+		//initMgr();
+		NoteMgr.getInstance().setMove(p0, p1);
 		initStage();
 		Gdx.input.setInputProcessor(stage);
 		batch=stage.getSpriteBatch();
@@ -66,15 +66,15 @@ public class SkateScreen implements Screen {
 		Element root=XMLMgr.getInstance().readXML();
 		PlayerMgr.getInstance().setProxy(proxy);
 		NoteMgr.getInstance().setRoot(root);
-		NoteMgr.getInstance().mode=NoteMgr.MODE_GAME;
-		NoteMgr.getInstance().setMove(p0, p1);
+		NoteMgr.getInstance().mode=NoteMgr.MODE_GAME;		
 		Song song=SongFactory.getInstance().getSong();		
 		SongMgr.getInstance().setSong(song);
 		SongMgr.getInstance().setProxy(proxy);
 		SongMgr.getInstance().pause();
+		TimeUtil.getInstance().markPoint();
 	}
 	
-	private void initStage(){	
+	private void initStage(){			
 		Image bkImage=GUIFactory.getInstance().getGameBkImg();
 		stage.addActor(bkImage);
 		leftButton=ButtonFactory.getInstance().ctrlButton(0,touchDownLeft(),null);
@@ -87,6 +87,7 @@ public class SkateScreen implements Screen {
 		upButton.x=430; upButton.y=87;
 		stage.addActor(upButton);
 		anim_white=AnimFactory.getInstance().getWhite();
+		PlayerMgr.getInstance().state=PlayerMgr.STATE_STAND;
 		light=LightMgr.getInstance().getLight();
 		light.x=230; light.y=220;
 		stage.addActor(light);		
@@ -104,7 +105,7 @@ public class SkateScreen implements Screen {
 		lbl_songInfo.setText(SongMgr.getInstance().getName()+"--"+SongMgr.getInstance().getSinger());
 		stage.addActor(lbl_songInfo);
 		lbl_time=new Label("", style);
-		lbl_time.x=360;
+		lbl_time.x=340;
 		lbl_time.y=Gdx.graphics.getHeight()-10;
 		lbl_time.width=40;
 		lbl_time.setText(TimeUtil.getInstance().timeFormat(SongMgr.getInstance().getTime()));
@@ -128,7 +129,7 @@ public class SkateScreen implements Screen {
 			@Override
 			public void click(Actor arg0, float arg1, float arg2) {
 				// TODO Auto-generated method stub
-				((StartGameActivity)MusicGame.act).goList();
+				//((StartGameActivity)MusicGame.act).goList();
 				stage.removeActor(win_info);
 				
 			}
@@ -145,30 +146,30 @@ public class SkateScreen implements Screen {
 			batch.draw(anim_white.getKeyFrame(TimeUtil.getInstance().getGameNow(), true),235,-15);
 			batch.end();	
 			Note note=NoteMgr.getInstance().getCurrentNote();
-			if(note!=null) noteGroup.addActorAt(0, note);		
-			pNote=NoteMgr.getInstance().firstNote();	
-			NoteMgr.getInstance().updateNotes();
+			if(note!=null) 	noteGroup.addActorAt(0, note);
+			pNote=NoteMgr.getInstance().firstNote();				
+			NoteMgr.getInstance().updateNotes();			
 			if(pNote!=null && pNote.statetime>(pNote.time-.2f))
 				LightMgr.getInstance().turnGreen();
 			else
 				LightMgr.getInstance().turnRed();	
 			noteStage.draw();
 		}
-		if(!over){
-			batch.begin();
+		batch.begin();
+		if(isUp)
+			batch.draw(PlayerMgr.getInstance().getKeyFrame(), 227,10);
+		else
 			batch.draw(PlayerMgr.getInstance().getKeyFrame(), 217,10);
-			batch.end();	
-		}
-		if(SongMgr.getInstance().isStop() && !over){
-			over=true;
+		batch.end();	
+		if(start && SongMgr.getInstance().isStop()){
+			start=false;
 			gameOver();
 		}
 	}
 	
-	private void gameOver(){
-		start=false;
+	private void gameOver(){		
 		SongMgr.getInstance().stop();
-		PlayerMgr.getInstance().state=PlayerMgr.STATE_STAND;
+		PlayerMgr.getInstance().state="";
 		stage.addActor(win_info);
 		win_info.setInfos(PlayerMgr.getInstance().getName(), SongMgr.getInstance().getName(), PlayerMgr.getInstance().getSocres(), 
 				PlayerMgr.getInstance().getScore(), PlayerMgr.getInstance().getHiScore());		
@@ -249,7 +250,7 @@ public class SkateScreen implements Screen {
 			public void touchDown() {
 				// TODO Auto-generated method stub
 				PlayerMgr.getInstance().stateTime=0f;
-				PlayerMgr.getInstance().state=PlayerMgr.STATE_RIGHT;				
+				PlayerMgr.getInstance().state=PlayerMgr.STATE_RIGHT;	
 				if(pNote!=null){
 					TestTouch(pNote);
 				}
@@ -263,11 +264,9 @@ public class SkateScreen implements Screen {
 			public void touchDown() {
 				// TODO Auto-generated method stub
 				if(start){
+					isUp=true;
 					PlayerMgr.getInstance().stateTime=0f;
 					PlayerMgr.getInstance().state=PlayerMgr.STATE_JUMP;
-					if(pNote!=null && TimeUtil.getInstance().getGameNow()>pNote.time){
-						PlayerMgr.getInstance().state=PlayerMgr.STATE_SKATE;		
-					}
 				}
 				if(!start){
 					start=true;
@@ -285,9 +284,10 @@ public class SkateScreen implements Screen {
 			@Override
 			public void touchUp() {
 				// TODO Auto-generated method stub
+				isUp=false;
 				if(pNote!=null)	TestTouch(pNote);				
 				if(PlayerMgr.getInstance().state==PlayerMgr.STATE_JUMP)
-					PlayerMgr.getInstance().state=PlayerMgr.STATE_SKATE;			
+					PlayerMgr.getInstance().state=PlayerMgr.STATE_SKATE;
 				Gdx.app.log("here", "up");
 			}
 		};

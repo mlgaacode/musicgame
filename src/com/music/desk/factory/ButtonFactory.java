@@ -42,7 +42,7 @@ public class ButtonFactory implements IFactory {
 				// TODO Auto-generated method stub
 				super.touchDown(x, y, pointer);
 				listener.touchDown();
-				return false;
+				return true;
 			}
 			@Override
 			public void touchUp(float x, float y, int pointer) {

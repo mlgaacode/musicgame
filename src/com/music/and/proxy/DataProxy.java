@@ -17,7 +17,7 @@ public class DataProxy implements IDataProxy {
 		// TODO Auto-generated method stub			
 		return data;
 	}
-	public void setdbData(Context context,int id){
+	public void setSongId(Context context,int id){
 		String args[]={String.valueOf(id)};
 		try {
 			SQLiteDatabase database=Util.openDatabase(context);

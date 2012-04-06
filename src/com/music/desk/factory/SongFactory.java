@@ -42,7 +42,7 @@ public class SongFactory implements IFactory {
 		return song;
 	}
 	private Song getSong(String name,String file){
-		Music music=Gdx.audio.newMusic(Gdx.files.internal(Config.songPath+file));
+		Music music=Gdx.audio.newMusic(Gdx.files.internal(Config.songPath+"/"+file));
 		music.setVolume(0.5f);
 		Song song=new Song();
 		song.setName(name);

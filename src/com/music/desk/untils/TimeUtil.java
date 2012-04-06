@@ -42,7 +42,9 @@ public class TimeUtil implements ITimeUtil {
 		int m=(int)(sec/60);
 		int s=sec%60;
 		if(m<10)str="0"+m;
-		if(s<10)str=str+"0"+s;
+		else str=""+m;
+		if(s<10)str=str+":0"+s;
+		else str=str+":"+s;
 		return str;
 	}
 

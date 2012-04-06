@@ -23,7 +23,7 @@
         <activity android:name="EditSongListActivity"></activity>
         <activity android:name="StartGameActivity"></activity>
         <activity android:name="StartGameActivity"></activity>
-        <activity android:name="SkateScreen"></activity>
+        <activity android:name="GdxActivity"></activity>
         </application>
           
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"> </uses-permission>

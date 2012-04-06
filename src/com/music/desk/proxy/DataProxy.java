@@ -1,15 +1,28 @@
 package com.music.desk.proxy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
+import com.music.desk.Config;
 
 public class DataProxy implements IDataProxy {
 
 	@Override
 	public String getNotesInfo() {
 		// TODO Auto-generated method stub
-		String data="<root title=\"song1\"><note time=\"1344\" type=\"A\" duration=\"125\"/></root>";
-		return data;
+		XmlReader reader=new XmlReader();
+		Element ele=null;
+		try {
+			ele=reader.parse(Gdx.files.internal(Config.songPath+"/"+"test.xml"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ele.toString();
 	}
 
 	@Override
@@ -22,8 +35,8 @@ public class DataProxy implements IDataProxy {
 	public List<String> getSongInfo() {
 		// TODO Auto-generated method stub
 		ArrayList<String> l=new ArrayList<String>();
-		l.add("SongName");
-		l.add("Singer");
+		l.add("TestSong");
+		l.add("SingerTest");
 		l.add("2300000");
 		return l;
 	}

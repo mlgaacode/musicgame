@@ -13,14 +13,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 public class MusicGameActivity extends Activity {
     /** Called when the activity is first created. */
 	private Intent intent;
-	private EditText txt_userName;
 	private Button btn_login;
+	private Spinner sp_nickname;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,17 +43,35 @@ public class MusicGameActivity extends Activity {
     }
     
 	private void initView(){
-		txt_userName=(EditText)findViewById(R.id.txt_user_name);
+		sp_nickname=(Spinner)findViewById(R.id.sp_nickname);
+		ArrayAdapter<CharSequence> ad=ArrayAdapter.createFromResource(this, R.array.nickname_sp, R.layout.login);
+		ad.setDropDownViewResource(R.layout.login);
+		sp_nickname.setAdapter(ad);
+		sp_nickname.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		btn_login=(Button)findViewById(R.id.btn_login);
 		btn_login.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				if(txt_userName.getText().toString()!=""){
+				String name=sp_nickname.getSelectedItem().toString();
+				if(name!=""){
 					SharedPreferences settings=getSharedPreferences("settings", MODE_PRIVATE);
 					Editor editor=settings.edit();
-					editor.putString("name", txt_userName.getText().toString());
+					editor.putString("name", name);
 					editor.commit();
 				}
 				intent=new Intent();
