@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+        <TextView
+            android:text="@string/editsong_btn"
+        	android:layout_width="200px"
+        	android:layout_height="wrap_content"
+        	android:layout_marginLeft="10px"
+        	android:layout_marginTop="5px"
+        	/>
+        
+		<ListView
+        android:id="@+id/lv_editSongs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+</LinearLayout>

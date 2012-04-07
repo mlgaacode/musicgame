@@ -1,0 +1,12 @@
+<root title="song1">
+	<note type="A" duration="2125" time="3344"/>
+	<note type="A" duration="2125" time="6312"/>
+	<note type="B" duration="2203" time="9469"/>
+	<note type="B" duration="2225" time="12703"/>
+	<note type="B" duration="3203" time="15953"/>
+	<note type="B" duration="3141" time="18109"/>
+	<note type="B" duration="3204" time="21562"/>
+	<note type="C" duration="3187" time="24219"/>
+	<note type="A" duration="4141" time="27500"/>
+	<note type="A" duration="4403" time="11531"/>
+</root>
