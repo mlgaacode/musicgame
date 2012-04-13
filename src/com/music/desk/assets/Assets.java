@@ -20,15 +20,15 @@ public final class Assets {
 	private static BitmapFont font1=null;
 	
 	public static Texture getButtions(){
-		return buttons==null?buttons=new Texture(Config.imgPath+"/"+ASSETS_BUTTONS_PNG):buttons;
+		return buttons==null?buttons=new Texture(Gdx.files.internal(Config.imgPath+"/"+ASSETS_BUTTONS_PNG)):buttons;
 	}
 	
 	public static Texture getPlayer(){
-		return player==null?player=new Texture(Config.imgPath+"/"+ASSETS_PLAYER_PNG):player;
+		return player==null?player=new Texture(Gdx.files.internal(Config.imgPath+"/"+ASSETS_PLAYER_PNG)):player;
 	}
 	
 	public static Texture getGamebk(){
-		return gamebk==null?gamebk=new Texture(Config.imgPath+"/"+ASSETS_GAMEBK_PNG):gamebk;
+		return gamebk==null?gamebk=new Texture(Gdx.files.internal(Config.imgPath+"/"+ASSETS_GAMEBK_PNG)):gamebk;
 	}
 	
 	public static BitmapFont getFont1(){

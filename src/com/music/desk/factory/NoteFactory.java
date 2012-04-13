@@ -25,13 +25,15 @@ public class NoteFactory implements IFactory {
 		Note note;
 		if(type=="long")
 			note=new Note(new TextureRegion(texture, 20, 0, 17, 88));
+		else if(type=="block")
+			note=new Note(new TextureRegion(texture, 0, 20, 20, 20));
 		else
 			note=new Note(new TextureRegion(texture, 0, 0, 20, 20));
 		return note;
 	}
 	
 	public  Note getNotesByXML(Element element){
-		Note note=getNote("");
+		Note note=getNote("block");
 //		if(Float.valueOf(element.getAttribute("duration"))/1000<2f)
 //			note=getNote("");
 //		else {
@@ -41,8 +43,8 @@ public class NoteFactory implements IFactory {
 		note.time=Float.valueOf(element.getAttribute("time"))/1000;
 		note.duration=Float.valueOf(element.getAttribute("duration"));
 		note.type=element.getAttribute("type").trim();
-		note.state=Note.STATE_SCALE_FLIP;		
-		//note.scaleX=Float.valueOf(element.getAttribute("duration"))*10+1;
+		note.state=Note.STATE_SCALE_FLIP;
+		note.scaleX=Float.valueOf(element.getAttribute("duration"))*10+1;
 		return note;
 	}
 	@Override

@@ -5,10 +5,9 @@
     android:orientation="vertical" >
     <TextView   
            android:id="@+id/title"  
-           android:layout_width="wrap_content"  
-           android:layout_height="fill_parent"  
-           android:textSize="22px"   
-           android:width="100px"  
+           android:layout_width="fill_parent"  
+           android:layout_height="wrap_content"  
+           android:textSize="22px"  
             />  
     <TextView   
        android:id="@+id/info"  
