@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import com.music.and.R;
 import com.music.and.utils.Util;
+import com.music.desk.manager.NoteMgr;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -42,11 +43,12 @@ public class SongListActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
 				//进入游戏主界面
 				Map<String, Object> target=(Map<String, Object> )arg0.getAdapter().getItem(position);
-				Log.i("title", target.get("title").toString());
-				intent=new Intent();
-				intent.setClass(SongListActivity.this, StartGameActivity.class);
+				Log.i("title", target.get("title").toString());				
 				Bundle bundle=new Bundle();
 				bundle.putInt("id", (Integer) target.get("id"));
+				bundle.putString("mode", NoteMgr.MODE_GAME);
+				intent=new Intent();
+				intent.setClass(SongListActivity.this, StartGameActivity.class);
 				intent.putExtras(bundle);
 				startActivity(intent);
 			}
@@ -70,34 +72,38 @@ public class SongListActivity extends Activity {
 		mListData.addAll(Setting.getInstance().getDemoSong());
 		SQLiteDatabase database=Util.openDatabase(this);
 		Cursor mCursor=database.rawQuery("select musicId from songs",null);
-		mCursor.moveToFirst();		
+		mCursor.moveToFirst();	
+		List<String> musicIds=new ArrayList<String>();
+		for(int i=0;i<mCursor.getCount();i++){
+			musicIds.add(mCursor.getString(0));
+			mCursor.moveToNext();
+		}
+		mCursor.close();
+		database.close();
 		Cursor mAudioCursor = this.getContentResolver().query(	MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,	null,null, null, MediaStore.Audio.AudioColumns.TITLE);
 		int indexTitle = mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE);
 		int indexARTIST = mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST);
 		int indexALBUM = mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM);
-		int indexId=mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns._ID);		
+		int indexId=mAudioCursor.getColumnIndex(MediaStore.Audio.AudioColumns._ID);	
+		mAudioCursor.moveToFirst();
 		for (int i = 0; i < mAudioCursor.getCount(); i++) {
-			mAudioCursor.moveToNext();
-			String strTitle = mAudioCursor.getString(indexTitle);
-			String strARTIST = mAudioCursor.getString(indexARTIST);
-			String strALBUM = mAudioCursor.getString(indexALBUM);
 			String strId=mAudioCursor.getString(indexId);	
-			for(int j=0;j<mCursor.getColumnCount();j++){
-				mCursor.moveToNext();
-				if(strId.equals(mCursor.getString(0))){
+			for(int j=0;j<musicIds.size();j++){	
+				if(strId.equals(musicIds.get(j))){
+					String strTitle = mAudioCursor.getString(indexTitle);
+					String strARTIST = mAudioCursor.getString(indexARTIST);
+					String strALBUM = mAudioCursor.getString(indexALBUM);
 					HashMap<String, Object> nowMap = new HashMap<String, Object>();
 					nowMap.put("title", strTitle);
 					nowMap.put("info", strARTIST+ "---" + strALBUM);
 					nowMap.put("id", strId);
 					mListData.add(nowMap);
-					mCursor.moveToFirst();		
 					break;
 				}
 			}			
+			mAudioCursor.moveToNext();			
 		}
-		mCursor.close();
-		mAudioCursor.close();
-		database.close();
+		mAudioCursor.close();		
 		return mListData;
 	}
 	@Override

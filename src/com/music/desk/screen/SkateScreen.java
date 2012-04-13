@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import com.music.and.StartGameActivity;
 import com.music.desk.MusicGame;
 import com.music.desk.assets.Assets;
 import com.music.desk.factory.AnimFactory;
@@ -31,6 +30,7 @@ import com.music.desk.manager.XMLMgr;
 import com.music.desk.model.Note;
 import com.music.desk.model.Song;
 import com.music.desk.proxy.DataProxy;
+import com.music.desk.proxy.IDataProxy;
 import com.music.desk.ui.InfoWin;
 import com.music.desk.ui.TouchDownListener;
 import com.music.desk.ui.TouchUpListener;
@@ -53,7 +53,7 @@ public class SkateScreen implements Screen {
 	public SkateScreen(){	
 		stage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);		
 		noteStage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-		//initMgr();
+		initMgr();
 		NoteMgr.getInstance().setMove(p0, p1);
 		initStage();
 		Gdx.input.setInputProcessor(stage);
@@ -61,8 +61,12 @@ public class SkateScreen implements Screen {
 	}
 	
 	private void initMgr(){
-		DataProxy proxy=new DataProxy();
-		XMLMgr.getInstance().setProxy(proxy);
+		IDataProxy proxy=XMLMgr.getInstance().getProxy();
+		if(proxy==null)
+		{
+			proxy=new DataProxy();
+			XMLMgr.getInstance().setProxy(proxy);
+		}
 		Element root=XMLMgr.getInstance().readXML();
 		PlayerMgr.getInstance().setProxy(proxy);
 		NoteMgr.getInstance().setRoot(root);
@@ -74,7 +78,7 @@ public class SkateScreen implements Screen {
 		TimeUtil.getInstance().markPoint();
 	}
 	
-	private void initStage(){			
+	private void initStage(){	
 		Image bkImage=GUIFactory.getInstance().getGameBkImg();
 		stage.addActor(bkImage);
 		leftButton=ButtonFactory.getInstance().ctrlButton(0,touchDownLeft(),null);
@@ -128,10 +132,9 @@ public class SkateScreen implements Screen {
 			
 			@Override
 			public void click(Actor arg0, float arg1, float arg2) {
-				// TODO Auto-generated method stub
-				//((StartGameActivity)MusicGame.act).goList();
+				// TODO Auto-generated method stub				
 				stage.removeActor(win_info);
-				
+				MusicGame.act.goList();
 			}
 		};		
 		return listener;
@@ -139,16 +142,21 @@ public class SkateScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub		
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		stage.draw();				
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);					
+		stage.draw();	
+		if(start && SongMgr.getInstance().isStop()){
+			start=false;			
+			gameOver();
+			return;
+		}		
 		if(start) {
 			batch.begin();
 			batch.draw(anim_white.getKeyFrame(TimeUtil.getInstance().getGameNow(), true),235,-15);
-			batch.end();	
+			batch.end();
 			Note note=NoteMgr.getInstance().getCurrentNote();
 			if(note!=null) 	noteGroup.addActorAt(0, note);
 			pNote=NoteMgr.getInstance().firstNote();				
-			NoteMgr.getInstance().updateNotes();			
+			NoteMgr.getInstance().updateNotes();	
 			if(pNote!=null && pNote.statetime>(pNote.time-.2f))
 				LightMgr.getInstance().turnGreen();
 			else
@@ -160,14 +168,10 @@ public class SkateScreen implements Screen {
 			batch.draw(PlayerMgr.getInstance().getKeyFrame(), 227,10);
 		else
 			batch.draw(PlayerMgr.getInstance().getKeyFrame(), 217,10);
-		batch.end();	
-		if(start && SongMgr.getInstance().isStop()){
-			start=false;
-			gameOver();
-		}
+		batch.end();
 	}
 	
-	private void gameOver(){		
+	private void gameOver(){
 		SongMgr.getInstance().stop();
 		PlayerMgr.getInstance().state="";
 		stage.addActor(win_info);
@@ -209,7 +213,8 @@ public class SkateScreen implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-
+		stage.dispose();
+		noteStage.dispose();
 	}
 	
 	private final TouchDownListener touchDownLeft() {
@@ -284,6 +289,7 @@ public class SkateScreen implements Screen {
 			@Override
 			public void touchUp() {
 				// TODO Auto-generated method stub
+				if(!start) return;
 				isUp=false;
 				if(pNote!=null)	TestTouch(pNote);				
 				if(PlayerMgr.getInstance().state==PlayerMgr.STATE_JUMP)

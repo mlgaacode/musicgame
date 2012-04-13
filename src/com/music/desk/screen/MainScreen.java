@@ -4,52 +4,45 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveTo;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectionListener;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import com.music.desk.Config;
-import com.music.desk.assets.Assets;
+import com.music.desk.MusicGame;
 import com.music.desk.factory.ButtonFactory;
 import com.music.desk.factory.GUIFactory;
 import com.music.desk.factory.NoteFactory;
 import com.music.desk.factory.SongFactory;
 import com.music.desk.manager.NoteMgr;
+import com.music.desk.manager.PlayerMgr;
 import com.music.desk.manager.SongMgr;
 import com.music.desk.manager.XMLMgr;
 import com.music.desk.model.Note;
 import com.music.desk.model.Song;
-import com.music.desk.ui.TouchDownListener;
-import com.music.desk.ui.TouchUpListener;
+import com.music.desk.proxy.DataProxy;
+import com.music.desk.proxy.IDataProxy;
 import com.music.desk.untils.TimeUtil;
 
 public class MainScreen implements Screen,InputProcessor{
 	
-	private Button btn_play;
-	private Button btn_pause;
-	private Button btn_stop;
-	private Button btn_demo;
+	private Button btn_play,btn_pause,btn_stop,btn_demo,btn_return;
+	
 	private Stage stage;
-	private List list_song;
 	private Element root;
 	private Image image_touch;	
 	public MainScreen(){
+		initMgr();
 		initStage();
 		root=new Element("root", null);
 		InputMultiplexer inputMultiplexer=new InputMultiplexer();
 		inputMultiplexer.addProcessor(this);
 		inputMultiplexer.addProcessor(stage);
-		Gdx.input.setInputProcessor(inputMultiplexer);			
+		Gdx.input.setInputProcessor(inputMultiplexer);	
 	}
+	
 	private void initStage(){
 		stage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		Group btn_group=new Group();
@@ -69,10 +62,15 @@ public class MainScreen implements Screen,InputProcessor{
 		btn_demo.x=280;
 		btn_demo.y=1;
 		btn_demo.setClickListener(demoListener());		
+		btn_return=ButtonFactory.getInstance().returnButton();
+		btn_return.x=350;
+		btn_return.y=1;
+		btn_return.setClickListener(returnListener());
 		btn_group.addActor(btn_play);
 		btn_group.addActor(btn_pause);
 		btn_group.addActor(btn_stop);	
 		btn_group.addActor(btn_demo);
+		btn_group.addActor(btn_return);
 		btn_group.x=0;
 		btn_group.y=Gdx.graphics.getHeight()-20;
 		btn_group.width=380;
@@ -80,45 +78,44 @@ public class MainScreen implements Screen,InputProcessor{
 		stage.addActor(btn_group);
 		image_touch=GUIFactory.getInstance().getTouchImg();
 		image_touch.x=0;
-		image_touch.y=0;
+		image_touch.y=0;		
 		image_touch.visible=false;
 		stage.addActor(image_touch);
-		ListStyle style=new ListStyle(new BitmapFont(Gdx.files.internal(Config.fontPath+Assets.FONT_FONT1_FNT),
-									Gdx.files.internal(Config.fontPath+Assets.FONT_FONT1_PNG),false),Color.BLUE,Color.WHITE,ButtonFactory.getInstance().listPatch());
-		list_song=new List(SongFactory.getInstance().getSongNames().toArray(),style);
-		list_song.x=380;
-		list_song.y=Gdx.graphics.getHeight()-list_song.height;
-		list_song.setSelectionListener(selectionListener());
-		list_song.setSelectedIndex(0);
-		Song song=SongFactory.getInstance().getSong();
-		SongMgr.getInstance().setSong(song);
-		//XMLMgr.getInstance().setFile(song.getNoteFile());
-		stage.addActor(list_song);
 	}
 	
-	private SelectionListener selectionListener(){
-		SelectionListener listener=new SelectionListener() {
+	private void initMgr(){
+		IDataProxy proxy=XMLMgr.getInstance().getProxy();
+		if(proxy==null)
+		{
+			proxy=new DataProxy();
+			XMLMgr.getInstance().setProxy(proxy);
+		}
+		Song song=SongFactory.getInstance().getSong();
+		SongMgr.getInstance().setSong(song);
+		PlayerMgr.getInstance().setProxy(proxy);
+	}
+	private ClickListener returnListener(){
+		ClickListener listener=new ClickListener() {
+			
 			@Override
-			public void selected(Actor actor, int index, String value) {
+			public void click(Actor arg0, float arg1, float arg2) {
 				// TODO Auto-generated method stub
-				Song song=SongFactory.getInstance().getSong();
-				SongMgr.getInstance().setSong(song);
+				XMLMgr.getInstance().saveXML(root);
+				MusicGame.act.goEditList();
 			}
 		};
 		return listener;
 	}
 	
 	private ClickListener playListener() {
-		ClickListener listener=new ClickListener() {			
+		ClickListener listener=new ClickListener() {
 			@Override
 			public void click(Actor actor, float x, float y) {
 				// TODO Auto-generated method stub
+				image_touch.visible=true;
 				NoteMgr.getInstance().mode=NoteMgr.MODE_PLAY;
-				list_song.action(MoveTo.$(Gdx.graphics.getWidth(), list_song.y, 0.5f));
 				SongMgr.getInstance().play();
 				TimeUtil.getInstance().markPoint();
-				//XMLMgr.getInstance().setFile(SongMgr.getInstance().getSong().getNoteFile());
-				image_touch.visible=true;
 			}
 		};
 		return listener;
@@ -128,10 +125,9 @@ public class MainScreen implements Screen,InputProcessor{
 			@Override
 			public void click(Actor actor, float x, float y) {
 				// TODO Auto-generated method stub
-				list_song.action(MoveTo.$(380, list_song.y, 0.5f));
-				SongMgr.getInstance().pause();
-				XMLMgr.getInstance().saveXML(root);
 				image_touch.visible=false;
+				SongMgr.getInstance().pause();
+				XMLMgr.getInstance().setXML(root);				
 			}
 		};
 		return listener;
@@ -141,25 +137,21 @@ public class MainScreen implements Screen,InputProcessor{
 			@Override
 			public void click(Actor actor, float x, float y) {
 				// TODO Auto-generated method stub
-				list_song.action(MoveTo.$(380, list_song.y, 0.5f));
 				SongMgr.getInstance().stop();
-				XMLMgr.getInstance().saveXML(root);
-				root=null;
-				root=new Element("root", null);
+				XMLMgr.getInstance().setXML(root);
 				image_touch.visible=false;
 			}
 		};
 		return listener;
 	}
 	/*
-	 * ��ʾ
+	 * 演示模式
 	 */
 	private ClickListener demoListener() {
 		ClickListener listener=new ClickListener() {			
 			@Override
 			public void click(Actor actor, float x, float y) {
 				// TODO Auto-generated method stub
-				list_song.action(MoveTo.$(Gdx.graphics.getWidth(), list_song.y, 0.5f));
 				image_touch.visible=true;
 				NoteMgr.getInstance().setRoot(XMLMgr.getInstance().readXML());
 				SongMgr.getInstance().play();
@@ -239,7 +231,7 @@ public class MainScreen implements Screen,InputProcessor{
 	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		if(arg1>20){
-			Note note=NoteFactory.getInstane().getNote("");
+			Note note=NoteFactory.getInstane().getNote("block");
 			note.setPosition(arg0,Gdx.graphics.getHeight()-arg1);			
 			note.state=Note.STATE_SCALE;
 			note.time=TimeUtil.getInstance().getTimePoint();

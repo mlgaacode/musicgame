@@ -85,7 +85,7 @@ public class ButtonFactory implements IFactory {
 		return n;
 	}
 	public Button demoButton(){
-		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 119, 64, 17));
+		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 141, 64, 17));
 		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
 		Button btn=new Button(style);
 		return btn;
@@ -101,6 +101,12 @@ public class ButtonFactory implements IFactory {
 		TextFieldStyle style=new TextFieldStyle(Assets.getFont1(), Color.BLACK, Assets.getFont1(), Color.GRAY, null, null, n1);
 		TextField textField=new TextField(style);
 		return textField;
+	}
+	public Button returnButton(){
+		NinePatch n1=new NinePatch(new TextureRegion(texture, 153, 40, 55, 17));
+		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
+		Button btn=new Button(style);
+		return btn;
 	}
 	
 	@Override

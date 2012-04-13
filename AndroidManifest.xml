@@ -2,10 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.music.and"
     android:versionCode="1"
-    android:installLocation="preferExternal"
     android:versionName="1.0" >
-
-    <uses-sdk android:minSdkVersion="8" />
+<!-- android:installLocation="preferExternal"  -->
+    <uses-sdk android:minSdkVersion="7" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -22,8 +21,6 @@
         <activity android:name="SongListActivity"></activity>
         <activity android:name="EditSongListActivity"></activity>
         <activity android:name="StartGameActivity"></activity>
-        <activity android:name="StartGameActivity"></activity>
-        <activity android:name="GdxActivity"></activity>
         </application>
           
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"> </uses-permission>

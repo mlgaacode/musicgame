@@ -93,6 +93,6 @@ public class PlayerMgr {
 			return anims.get(3).getKeyFrame(this.stateTime, false);
 		}
 		//default
-		return null;
+		return anims.get(0).getKeyFrame(this.stateTime, true);
 	}
 }

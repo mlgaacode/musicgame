@@ -22,7 +22,7 @@ public class GUIFactory implements IFactory{
 	
 	public Image getTouchImg(){
 		texture=Assets.getPlayer();
-		NinePatch n=new NinePatch(new TextureRegion(texture,0,180,480,300));
+		NinePatch n=new NinePatch(new TextureRegion(texture,0,188,480,300));
 		return new Image(n);
 	}
 	

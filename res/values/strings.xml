@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">MusicGame</string>
 	<string name="login_btn">登录</string>
 	<string name="songs_lv">歌曲列表</string>
 	<string name="editsong_btn">编辑歌曲</string>
-	<string-array name="nickname_sp">
-	    <item>Jack</item>
-	    <item>Lucy</item>
-	</string-array>
+	<string name="role_lbl">请先选择一个角色:</string>
 </resources>

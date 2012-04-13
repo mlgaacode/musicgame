@@ -1,6 +1,5 @@
 package com.music.desk.proxy;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +57,7 @@ public class DataProxy implements IDataProxy {
 		// TODO Auto-generated method stub
 		return 1000;
 	}
+	
 
 	@Override
 	public void saveScores(int score, int hiscore) {

@@ -1,11 +1,12 @@
 package com.music.desk;
 
-import android.app.Activity;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.music.and.IGdxActivity;
+import com.music.and.StartGameActivity;
 import com.music.desk.manager.ScreenMgr;
+import com.music.desk.screen.MainScreen;
 import com.music.desk.screen.SkateScreen;
 import com.music.desk.untils.Debugger;
 import com.music.desk.untils.TimeUtil;
@@ -15,9 +16,9 @@ public class MusicGame implements ApplicationListener {
 	boolean first=true;	
 	boolean debug=true;
 	BitmapFont font;
-	public static Activity act;
-	public MusicGame(Activity act){
-		this.act=act;
+	public static IGdxActivity act;
+	public MusicGame(IGdxActivity act){
+		MusicGame.act=act;	
 	}
 	public MusicGame(){
 
@@ -26,7 +27,7 @@ public class MusicGame implements ApplicationListener {
 	public void create() {
 		// TODO Auto-generated method stub
 		TimeUtil.getInstance();
-		ScreenMgr.getInstance().setScreen(new SkateScreen());
+		ScreenMgr.getInstance().setScreen(new MainScreen());
 	}
 
 	@Override

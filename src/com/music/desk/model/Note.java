@@ -75,7 +75,7 @@ public class Note extends Image implements INote {
 	@Override
 	public void destory() {
 		// TODO Auto-generated method stub
-		this.getRegion().getTexture().dispose();
+		//this.getRegion().getTexture().dispose();
 	}
 
 }

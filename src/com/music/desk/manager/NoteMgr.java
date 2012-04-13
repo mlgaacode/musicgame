@@ -30,13 +30,13 @@ public class NoteMgr {
 	}
 	public void pushNote(Note note){
 		fadeOut=FadeOut.$(.3f);
-		fadeOut.setCompletionListener(completionListener());		
+		fadeOut.setCompletionListener(completionListener());	
 		vector.add(note);
 	}
 	public Note getCurrentNote(){
-		if(mode==MODE_PLAY){
+		if(mode==MODE_PLAY){    //编辑模式
 			return vector.size()>0?vector.lastElement():null;
-		}else if(mode==MODE_DEMO){
+		}else if(mode==MODE_DEMO){   //演示模式
 			if(eIndex<root.getChildCount() && vector.size()<2){
 				Note note=NoteFactory.getInstane().getNotesByXML(root.getChild(eIndex));
 				note.setPosition(240, 150);				
@@ -44,7 +44,7 @@ public class NoteMgr {
 				eIndex++;
 			}
 			return vector.size()>0?vector.firstElement():null;
-		}else if (mode==MODE_GAME) {
+		}else if (mode==MODE_GAME) {  //游戏模式
 			Note note=null;	
 			if(eIndex<root.getChildCount() && vector.size()<2){
 				note=NoteFactory.getInstane().getNotesByXML(root.getChild(eIndex));

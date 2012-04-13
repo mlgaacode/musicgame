@@ -13,7 +13,8 @@ public class XMLMgr implements IXMLMgr {
 	 */
 	private static XMLMgr instance=null;
 	private XmlReader reader;
-	private IDataProxy proxy;
+	private IDataProxy proxy=null;
+	private Element root=null;
 	public XMLMgr(){
 		reader=new XmlReader();
 	}
@@ -30,13 +31,25 @@ public class XMLMgr implements IXMLMgr {
 	@Override
 	public Element readXML() {
 		// TODO Auto-generated method stub
-		return reader.parse(proxy.getNotesInfo());
+		if(root==null)
+			root=reader.parse(proxy.getNotesInfo());
+		return root;
+	}
+	public void setXML(Element root){
+		this.root=root;
 	}
 	@Override
 	public void saveXML(Element element) {
 		// TODO Auto-generated method stub
 		proxy.setNotesInfo(element.toString());
 	}
-	
+	public IDataProxy getProxy(){
+		return proxy;
+	}
+	@Override
+	public void saveXML() {
+		// TODO Auto-generated method stub
+		proxy.setNotesInfo(root.toString());
+	}
 	
 }
