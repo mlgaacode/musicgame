@@ -3,6 +3,7 @@ package com.music.and;
 import com.music.and.proxy.DataProxy;
 import com.music.desk.Config;
 import com.music.desk.MusicGame;
+import com.music.desk.factory.SongFactory;
 import com.music.desk.manager.NoteMgr;
 import com.music.desk.manager.ScreenMgr;
 import com.music.desk.manager.XMLMgr;
@@ -29,18 +30,13 @@ public class StartGameActivity extends AndroidApplication implements IGdxActivit
 	
 	protected void initGame() {
 		Bundle bundle=getIntent().getExtras();
-		int id=Integer.valueOf(bundle.getString("id"));
 		String mode=bundle.getString("mode");
-		Config.
-		if(mode==NoteMgr.MODE_GAME){
-			ScreenMgr.getInstance().setScreen(new SkateScreen());
-			proxy=new DataProxy();
-			proxy.setSongId(this,id);
-			XMLMgr.getInstance().setProxy(proxy);
-		}
-		else if(mode==NoteMgr.MODE_PLAY){
-			ScreenMgr.getInstance().setScreen(new MainScreen());
-		}
+		proxy=DataProxy.getInstance();
+		proxy.querySong(this);
+		if(!proxy.songId.startsWith("demo"))
+			SongFactory.getInstance().setType("absolute");
+		Config.mode=mode;	
+		XMLMgr.getInstance().setProxy(proxy);
 	}	
 	@Override
 	public void goList(){

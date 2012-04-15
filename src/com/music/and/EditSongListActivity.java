@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.music.and.R;
+import com.music.and.proxy.DataProxy;
 import com.music.and.utils.Util;
 import com.music.desk.MusicGame;
 import com.music.desk.manager.NoteMgr;
@@ -45,10 +46,9 @@ public class EditSongListActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
 				//进入编辑主界面
 				Map<String, Object> target=(Map<String, Object> )arg0.getAdapter().getItem(position);
-				Log.i("id", target.get("id").toString());			
-				Setting.songId=target.get("id").toString();
+				Log.i("id", target.get("id").toString());	
+				DataProxy.getInstance().songId=target.get("id").toString();
 				Bundle bundle=new Bundle();
-				bundle.putString("id", target.get("id").toString());
 				bundle.putString("mode", NoteMgr.MODE_PLAY);
 				intent=new Intent();
 				intent.putExtras(bundle);

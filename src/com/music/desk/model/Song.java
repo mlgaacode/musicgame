@@ -35,7 +35,6 @@ public class Song implements ISong {
 	@Override
 	public void setMusic(Music music) {
 		// TODO Auto-generated method stub
-		music.setVolume(0);
 		this.music=music;
 	}
 	public boolean isStop(){

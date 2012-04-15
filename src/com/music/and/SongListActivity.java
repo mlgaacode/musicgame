@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.music.and.R;
+import com.music.and.proxy.DataProxy;
 import com.music.and.utils.Util;
 import com.music.desk.manager.NoteMgr;
 
@@ -15,6 +16,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -43,9 +45,9 @@ public class SongListActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
 				//进入游戏主界面
 				Map<String, Object> target=(Map<String, Object> )arg0.getAdapter().getItem(position);
-				Log.i("title", target.get("title").toString());				
+				Log.i("title", target.get("title").toString());
+				DataProxy.getInstance().songId=target.get("id").toString();
 				Bundle bundle=new Bundle();
-				bundle.putInt("id", (Integer) target.get("id"));
 				bundle.putString("mode", NoteMgr.MODE_GAME);
 				intent=new Intent();
 				intent.setClass(SongListActivity.this, StartGameActivity.class);
@@ -66,7 +68,23 @@ public class SongListActivity extends Activity {
 		});
 		
 	}	
-	
+	/*
+	 * 返回键处理
+	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+	 */
+	@Override	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if(keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount()==0){
+			Bundle bundle=new Bundle();
+			bundle.putBoolean("back", true);
+			intent=new Intent();
+			intent.putExtras(bundle);
+			intent.setClass(SongListActivity.this, MusicGameActivity.class);
+			startActivity(intent);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 	private List<Map<String, Object>> getData(){
 		List<Map<String, Object>> mListData = new ArrayList<Map<String, Object>>();		
 		mListData.addAll(Setting.getInstance().getDemoSong());

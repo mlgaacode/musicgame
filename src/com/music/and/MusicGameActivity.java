@@ -3,14 +3,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import com.music.and.R;
+import com.music.and.proxy.DataProxy;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.provider.Contacts.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class MusicGameActivity extends Activity {
     /** Called when the activity is first created. */
@@ -29,6 +27,8 @@ public class MusicGameActivity extends Activity {
 	private Spinner sp_nickname;
 	private ArrayAdapter<CharSequence> ad;
 	private SharedPreferences settings;
+	private boolean back=false;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,14 +36,19 @@ public class MusicGameActivity extends Activity {
         intent=new Intent();
         settings=getSharedPreferences("settings", MODE_PRIVATE);
         String userName=settings.getString("name", "");
+        Bundle bundle=getIntent().getExtras();        
+        back=bundle==null?false:bundle.getBoolean("back", false);
         if(userName==""){
         	 setContentView(R.layout.login);
         	 initView();
-        }else{
-        	Setting.getInstance().setName(userName);
+        }else if(!back){
+        	DataProxy.getInstance().userName=settings.getString("name", "");
         	intent.setClass(MusicGameActivity.this, SongListActivity.class); 
         	startActivity(intent);
-        }         
+        }else if(back){
+        	setContentView(R.layout.login);
+        	initView();
+        }
     }
     
 	private void initView(){
@@ -77,10 +82,11 @@ public class MusicGameActivity extends Activity {
 					Editor editor=settings.edit();
 					editor.putString("name", name);
 					editor.commit();
+					DataProxy.getInstance().userName=name;
+					intent=new Intent();
+					intent.setClass(MusicGameActivity.this, SongListActivity.class);
+					startActivity(intent);
 				}
-				intent=new Intent();
-				intent.setClass(MusicGameActivity.this, SongListActivity.class);
-				startActivity(intent);
 			}		
 		});
 	}

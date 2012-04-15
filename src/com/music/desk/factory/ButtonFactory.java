@@ -54,27 +54,33 @@ public class ButtonFactory implements IFactory {
 		return btn;
 	}
 	
-	public Button startButton(){
+	public Button editButton(){
 		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 40, 64, 17));
-		NinePatch n2=new NinePatch(new TextureRegion(texture, 88, 57, 64, 17));
-		ButtonStyle style=new ButtonStyle(n1,n2,n1,0f,0f,0f,0f);
+		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
 		Button btn=new Button(style);
 		return btn;
 	}
 	
-	public Button playButton() {
+	public Button testButton() {
 		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 74, 64,17));
 		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
 		Button btn=new Button(style);
 		return btn;
 	}
 	public Button pauseButton() {
+		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 57, 64, 17));
+		//
+		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
+		Button btn=new Button(style);
+		return btn;
+	}
+	public Button cancleButton() {
 		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 91, 64, 17));
 		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
 		Button btn=new Button(style);
 		return btn;
 	}
-	public Button stopButton() {
+	public Button saveButton() {
 		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 108, 64, 17));
 		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
 		Button btn=new Button(style);
@@ -84,7 +90,7 @@ public class ButtonFactory implements IFactory {
 		NinePatch n=new NinePatch(new TextureRegion(texture,88,125,64,17));
 		return n;
 	}
-	public Button demoButton(){
+	public Button gameButton(){
 		NinePatch n1=new NinePatch(new TextureRegion(texture, 88, 141, 64, 17));
 		ButtonStyle style=new ButtonStyle(n1,n1,n1,0f,0f,0f,0f);
 		Button btn=new Button(style);

@@ -4,7 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.music.and.IGdxActivity;
-import com.music.and.StartGameActivity;
+import com.music.desk.manager.NoteMgr;
 import com.music.desk.manager.ScreenMgr;
 import com.music.desk.screen.MainScreen;
 import com.music.desk.screen.SkateScreen;
@@ -27,7 +27,10 @@ public class MusicGame implements ApplicationListener {
 	public void create() {
 		// TODO Auto-generated method stub
 		TimeUtil.getInstance();
-		ScreenMgr.getInstance().setScreen(new MainScreen());
+		if(Config.mode.equals(NoteMgr.MODE_GAME))
+			ScreenMgr.getInstance().setScreen(new SkateScreen());
+		else if(Config.mode.equals(NoteMgr.MODE_PLAY))
+			ScreenMgr.getInstance().setScreen(new MainScreen());
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public class MainScreen implements Screen,InputProcessor{
 	private void initStage(){
 		stage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		Group btn_group=new Group();
-		btn_play=ButtonFactory.getInstance().playButton();
+		btn_play=ButtonFactory.getInstance().editButton();
 		btn_play.x=70;
 		btn_play.y=1;
 		btn_play.setClickListener(playListener());
@@ -54,15 +54,15 @@ public class MainScreen implements Screen,InputProcessor{
 		btn_pause.x=140;
 		btn_pause.y=1;
 		btn_pause.setClickListener(pauseListener());
-		btn_stop=ButtonFactory.getInstance().stopButton();
+		btn_stop=ButtonFactory.getInstance().saveButton();
 		btn_stop.x=210;
 		btn_stop.y=1;
 		btn_stop.setClickListener(stopListener());
-		btn_demo=ButtonFactory.getInstance().demoButton();
+		btn_demo=ButtonFactory.getInstance().testButton();
 		btn_demo.x=280;
 		btn_demo.y=1;
 		btn_demo.setClickListener(demoListener());		
-		btn_return=ButtonFactory.getInstance().returnButton();
+		btn_return=ButtonFactory.getInstance().gameButton();
 		btn_return.x=350;
 		btn_return.y=1;
 		btn_return.setClickListener(returnListener());
@@ -94,6 +94,7 @@ public class MainScreen implements Screen,InputProcessor{
 		SongMgr.getInstance().setSong(song);
 		PlayerMgr.getInstance().setProxy(proxy);
 	}
+	
 	private ClickListener returnListener(){
 		ClickListener listener=new ClickListener() {
 			

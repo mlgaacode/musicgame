@@ -9,7 +9,13 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 import com.music.desk.Config;
 
 public class DataProxy implements IDataProxy {
-
+	private static DataProxy instance=null; 
+	
+	public synchronized static IDataProxy getInstance(){
+		if(instance==null)
+			instance=new DataProxy();
+		return instance;
+	}
 	@Override
 	public String getNotesInfo() {
 		// TODO Auto-generated method stub
@@ -37,6 +43,7 @@ public class DataProxy implements IDataProxy {
 		l.add("TestSong");
 		l.add("SingerTest");
 		l.add("2300000");
+		l.add("test_song.mp3");
 		return l;
 	}
 

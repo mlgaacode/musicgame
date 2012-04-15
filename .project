@@ -34,7 +34,7 @@
 		<link>
 			<name>gdx</name>
 			<type>2</type>
-			<location>D:/workspace/libgdx/gdx/src</location>
+			<location>E:/develop/FlexWorkspace/libgdx/gdx/src</location>
 		</link>
 		<link>
 			<name>openal</name>

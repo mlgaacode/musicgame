@@ -1,7 +1,6 @@
 package com.music.and.proxy;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.music.and.Setting;
 import com.music.and.utils.Util;
@@ -18,62 +16,78 @@ import com.music.desk.proxy.IDataProxy;
 
 public class DataProxy implements IDataProxy {
 
-	private String data;
-	private List<String> info;
+	private String noteInfo;
+	private List<String> songInfo;
+	private static DataProxy instance=null;
+	public String songId;
+	public String userName;
+	
+	public synchronized static DataProxy getInstance(){
+		if(instance==null)
+			instance=new DataProxy();
+		return instance;
+	}
 	public DataProxy(){
-		info=new ArrayList<String>();
+		songInfo=new ArrayList<String>();
 	}
 	@Override
 	public String getNotesInfo() {
 		// TODO Auto-generated method stub
-		return data;
+		return noteInfo;
 	}
-	public void setSongId(Context context,int id){
-		String args[]={String.valueOf(id)};
+	public void querySong(Context context){
+		String args[]={songId};
 		try {
 			SQLiteDatabase database=Util.openDatabase(context);
 			Cursor cursor=database.rawQuery("select notesInfo from songs where musicId=?",args);
 			if(cursor.getCount()!=0){
 				cursor.moveToFirst();
-				data= cursor.getString(cursor.getColumnIndex("notesInfo"));
+				noteInfo= cursor.getString(cursor.getColumnIndex("notesInfo"));
 				cursor.close();
 				database.close();
 			}
-			if(id<3){
-				Map<String, Object> map=Setting.getInstance().getDemoSong().get(id);
-				info.add(map.get("title").toString());
-				info.add(map.get("info").toString());
-				info.add(map.get("time").toString());
+			if(songId.startsWith("demo")){
+				Map<String, Object> map=Setting.getInstance().getDemoSong().get(Integer.valueOf(songId.substring(4)));
+				songInfo.add(map.get("title").toString());
+				songInfo.add(map.get("info").toString());
+				songInfo.add(map.get("time").toString());
+				songInfo.add(map.get("file").toString());
 			}
 			else{
-				cursor = context.getContentResolver().query(	MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,	null,null, null, MediaStore.Audio.AudioColumns.TITLE);
+				cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,null,MediaStore.Audio.AudioColumns._ID+"="+songId,null, MediaStore.Audio.AudioColumns.TITLE);
 				int indexTitle = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE);
 				int indexAritist = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST);
 				int indexTime = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION);
+				int indexFile=cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA);
 				if (cursor.getCount()!=0) {
 					cursor.moveToFirst();
 					String strTitle = cursor.getString(indexTitle);
 					String strArtist = cursor.getString(indexAritist);
 					String strTime = cursor.getString(indexTime);
-					info.add(strTitle);
-					info.add(strArtist);
-					info.add(strTime);
+					String strFile=cursor.getString(indexFile);
+					songInfo.add(strTitle);
+					songInfo.add(strArtist);
+					songInfo.add(strTime);
+					songInfo.add(strFile);
 				}
 				cursor.close();
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void setNotesInfo(String root) {
 		// TODO Auto-generated method stub
-		String sql="insert into songs (musicId,notesinfo) value ("+Setting.songId+","+root+")";
+		String sql="";
 		try {
 				SQLiteDatabase database=Util.openDatabase(MusicGame.act.getContext());
+				sql="delete from songs where musicId="+songId;
 				database.execSQL(sql);
+				sql="insert into songs (musicId,notesInfo) values ("+songId+",'"+root+"')";
+				database.execSQL(sql);	
 				database.close();
 			}catch(Exception e){
 				e.printStackTrace();
@@ -83,17 +97,13 @@ public class DataProxy implements IDataProxy {
 	@Override
 	public List<String> getSongInfo() {
 		// TODO Auto-generated method stub
-		
-		ArrayList<String> l=new ArrayList<String>();
-		l.add("TestSong");
-		l.add("SingerTest");
-		l.add("2300000");
-		return l;
+		return songInfo;
 	}
+	
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return Setting.getInstance().getName();
+		return userName;
 	}
 	@Override
 	public int getScore() {
