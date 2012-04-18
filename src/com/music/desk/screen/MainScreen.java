@@ -28,11 +28,11 @@ import com.music.desk.untils.TimeUtil;
 
 public class MainScreen implements Screen,InputProcessor{
 	
-	private Button btn_play,btn_pause,btn_stop,btn_demo,btn_return;
+	private Button btn_edit,btn_pause,btn_test,btn_cancle,btn_save,btn_game;
 	
 	private Stage stage;
 	private Element root;
-	private Image image_touch;	
+	private Image image_touch;
 	public MainScreen(){
 		initMgr();
 		initStage();
@@ -46,31 +46,36 @@ public class MainScreen implements Screen,InputProcessor{
 	private void initStage(){
 		stage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		Group btn_group=new Group();
-		btn_play=ButtonFactory.getInstance().editButton();
-		btn_play.x=70;
-		btn_play.y=1;
-		btn_play.setClickListener(playListener());
+		btn_edit=ButtonFactory.getInstance().editButton();
+		btn_edit.x=40;
+		btn_edit.y=1;
+		btn_edit.setClickListener(editListener());
 		btn_pause=ButtonFactory.getInstance().pauseButton();
-		btn_pause.x=140;
+		btn_pause.x=110;
 		btn_pause.y=1;
 		btn_pause.setClickListener(pauseListener());
-		btn_stop=ButtonFactory.getInstance().saveButton();
-		btn_stop.x=210;
-		btn_stop.y=1;
-		btn_stop.setClickListener(stopListener());
-		btn_demo=ButtonFactory.getInstance().testButton();
-		btn_demo.x=280;
-		btn_demo.y=1;
-		btn_demo.setClickListener(demoListener());		
-		btn_return=ButtonFactory.getInstance().gameButton();
-		btn_return.x=350;
-		btn_return.y=1;
-		btn_return.setClickListener(returnListener());
-		btn_group.addActor(btn_play);
+		btn_test=ButtonFactory.getInstance().testButton();
+		btn_test.x=180;
+		btn_test.y=1;
+		btn_test.setClickListener(testListener());
+		btn_cancle=ButtonFactory.getInstance().cancleButton();
+		btn_cancle.x=250;
+		btn_cancle.y=1;
+		btn_cancle.setClickListener(cancleListener());		
+		btn_save=ButtonFactory.getInstance().saveButton();
+		btn_save.x=320;
+		btn_save.y=1;
+		btn_save.setClickListener(saveListener());
+		btn_game=ButtonFactory.getInstance().gameButton();
+		btn_game.x=390;
+		btn_game.y=1;
+		btn_game.setClickListener(gameListener());
+		btn_group.addActor(btn_edit);
 		btn_group.addActor(btn_pause);
-		btn_group.addActor(btn_stop);	
-		btn_group.addActor(btn_demo);
-		btn_group.addActor(btn_return);
+		btn_group.addActor(btn_test);	
+		btn_group.addActor(btn_cancle);
+		btn_group.addActor(btn_save);
+		btn_group.addActor(btn_game);
 		btn_group.x=0;
 		btn_group.y=Gdx.graphics.getHeight()-20;
 		btn_group.width=380;
@@ -95,7 +100,7 @@ public class MainScreen implements Screen,InputProcessor{
 		PlayerMgr.getInstance().setProxy(proxy);
 	}
 	
-	private ClickListener returnListener(){
+	private ClickListener saveListener(){
 		ClickListener listener=new ClickListener() {
 			
 			@Override
@@ -108,7 +113,7 @@ public class MainScreen implements Screen,InputProcessor{
 		return listener;
 	}
 	
-	private ClickListener playListener() {
+	private ClickListener editListener() {
 		ClickListener listener=new ClickListener() {
 			@Override
 			public void click(Actor actor, float x, float y) {
@@ -128,19 +133,19 @@ public class MainScreen implements Screen,InputProcessor{
 				// TODO Auto-generated method stub
 				image_touch.visible=false;
 				SongMgr.getInstance().pause();
-				XMLMgr.getInstance().setXML(root);				
+				XMLMgr.getInstance().setXML(root);		
 			}
 		};
 		return listener;
 	}
-	private ClickListener stopListener() {
+	private ClickListener cancleListener() {
 		ClickListener listener=new ClickListener() {			
 			@Override
-			public void click(Actor actor, float x, float y) {
+			public void click(Actor arg0, float arg1, float arg2) {
 				// TODO Auto-generated method stub
 				SongMgr.getInstance().stop();
-				XMLMgr.getInstance().setXML(root);
-				image_touch.visible=false;
+				root=null;				
+				MusicGame.act.goEditList();
 			}
 		};
 		return listener;
@@ -148,7 +153,7 @@ public class MainScreen implements Screen,InputProcessor{
 	/*
 	 * 演示模式
 	 */
-	private ClickListener demoListener() {
+	private ClickListener testListener() {
 		ClickListener listener=new ClickListener() {			
 			@Override
 			public void click(Actor actor, float x, float y) {
@@ -162,6 +167,19 @@ public class MainScreen implements Screen,InputProcessor{
 		};
 		return listener;
 	}
+	private ClickListener gameListener(){
+		ClickListener listener=new ClickListener() {
+			
+			@Override
+			public void click(Actor arg0, float arg1, float arg2) {
+				// TODO Auto-generated method stub
+				saveListener();
+				MusicGame.act.goList();
+			}
+		};
+		return listener;
+	}
+	
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
@@ -176,7 +194,13 @@ public class MainScreen implements Screen,InputProcessor{
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-
+		initMgr();
+		initStage();
+		root=new Element("root", null);
+		InputMultiplexer inputMultiplexer=new InputMultiplexer();
+		inputMultiplexer.addProcessor(this);
+		inputMultiplexer.addProcessor(stage);
+		Gdx.input.setInputProcessor(inputMultiplexer);	
 	}
 
 	@Override

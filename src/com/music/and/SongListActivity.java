@@ -29,6 +29,7 @@ public class SongListActivity extends Activity {
 	private ListView lv_songs;
 	private Button btn_editsong;
 	private Intent intent;
+	private SQLiteDatabase database;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -85,10 +86,11 @@ public class SongListActivity extends Activity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+	
 	private List<Map<String, Object>> getData(){
 		List<Map<String, Object>> mListData = new ArrayList<Map<String, Object>>();		
 		mListData.addAll(Setting.getInstance().getDemoSong());
-		SQLiteDatabase database=Util.openDatabase(this);
+		database=Util.openDatabase(this);
 		Cursor mCursor=database.rawQuery("select musicId from songs",null);
 		mCursor.moveToFirst();	
 		List<String> musicIds=new ArrayList<String>();
@@ -123,6 +125,19 @@ public class SongListActivity extends Activity {
 		}
 		mAudioCursor.close();		
 		return mListData;
+	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		initView();
+	}
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		super.finish();
+		if(database.isOpen())database.close();
 	}
 	@Override
 	protected void onDestroy() {

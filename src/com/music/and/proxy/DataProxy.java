@@ -43,9 +43,9 @@ public class DataProxy implements IDataProxy {
 			if(cursor.getCount()!=0){
 				cursor.moveToFirst();
 				noteInfo= cursor.getString(cursor.getColumnIndex("notesInfo"));
-				cursor.close();
-				database.close();
 			}
+			cursor.close();
+			database.close();
 			if(songId.startsWith("demo")){
 				Map<String, Object> map=Setting.getInstance().getDemoSong().get(Integer.valueOf(songId.substring(4)));
 				songInfo.add(map.get("title").toString());

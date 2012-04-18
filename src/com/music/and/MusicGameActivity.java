@@ -129,6 +129,7 @@ public class MusicGameActivity extends Activity {
 				file=new File(Setting.DATAPATH);
 				file.delete();
 			}
+			finish();
 			System.exit(0);
 			return true;
 		default:

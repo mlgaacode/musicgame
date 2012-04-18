@@ -201,13 +201,19 @@ public class SkateScreen implements Screen {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-
+		SongMgr.getInstance().stop();
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-
+		stage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);		
+		noteStage=new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+		initMgr();
+		NoteMgr.getInstance().setMove(p0, p1);
+		initStage();
+		Gdx.input.setInputProcessor(stage);
+		batch=stage.getSpriteBatch();
 	}
 
 	@Override

@@ -28,14 +28,15 @@ public class EditSongListActivity extends Activity {
 	
 	private ListView lv_songs;
 	private Intent intent;
+	private SQLiteDatabase database;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editlist);
 		initView();
-	}
-	
+	}	
+
 	private void initView() {
 		// TODO Auto-generated method stub
 		lv_songs=(ListView)findViewById(R.id.lv_editSongs);
@@ -60,7 +61,7 @@ public class EditSongListActivity extends Activity {
 	
 	private List<Map<String, Object>> getData(){
 		List<Map<String, Object>> mListData = new ArrayList<Map<String, Object>>();	
-		SQLiteDatabase database=Util.openDatabase(this);
+		database=Util.openDatabase(this);
 		Cursor mCursor=database.rawQuery("select musicId from songs",null);
 		mCursor.moveToFirst();	
 		List<String> musicIds=new ArrayList<String>();
@@ -93,11 +94,26 @@ public class EditSongListActivity extends Activity {
 				nowMap.put("title", strTitle);
 				nowMap.put("info", strARTIST+ "---" + strALBUM);
 				nowMap.put("id", strId);
-				mListData.add(nowMap);
-				exist=false;
+				mListData.add(nowMap);				
 			}
+			exist=false;
 			mAudioCursor.moveToNext();
 		}
+		mAudioCursor.close();
 		return mListData;
+	}
+	
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		super.finish();
+		if(database.isOpen())database.close();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub		
+		super.onResume();
+		initView();
 	}
 }
